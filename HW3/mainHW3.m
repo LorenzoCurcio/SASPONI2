@@ -38,7 +38,7 @@ y = rescale(y,-1.,1.);
 
 %% Playback
 audiowrite([mod_speed,'.wav'], y, Fs);
- 
+soundsc(y,Fs)
 
 %% Read the reference audio file
 dir_name = 'Leslie_ref';
