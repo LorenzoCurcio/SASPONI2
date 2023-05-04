@@ -51,7 +51,6 @@ m_t=Ms_t*sinusoid_t+Mb_t; % tremble modulator
 x = [0;0;0;0;x];
 hpf.in = x;
 lpf.in = x;
-y = hpf.in;
 
 for n=5:N+4
 
@@ -87,6 +86,5 @@ for n=5:N+4
     y(n-4)= y_lp_am +y_hp_am;
 
 end
-y = y(1:N);
 end
 

@@ -46,6 +46,6 @@ addpath(dir_name);
 [y_ref, ~] = audioread(fullfile(dir_name, strcat(mod_speed,'.wav')));
 
 %% Display the MSE
-MSE = mean(abs(y-y_ref).^2);
+MSE = mean(abs(y.'-y_ref).^2);
 MSE_str = sprintf('MSE: %g', MSE);
 disp(MSE_str)
