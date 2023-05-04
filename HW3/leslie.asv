@@ -38,8 +38,8 @@ lpf.in=zeros(N+4,1);
 sdf_h.state=zeros(N+N_sdf_t,1);
 sdf_h.in=zeros(N+N_sdf_t,1);
 % bass sdf filter buffers
-sdf_b.state=zeros(N+N_sdf_t,1);
-sdf_b.in=zeros(N+N_sdf_t,1);
+sdf_b.state=zeros(N+N_sdf_b,1);
+sdf_b.in=zeros(N+N_sdf_b,1);
 
 % modulators
 sinusoid = sin(2*pi*freq*linspace(0,N/Fs,N));
@@ -51,7 +51,7 @@ x = [0;0;0;0;x];
 hpf.in = x;
 lpf.in = x;
 y = hpf.in;
-for n=5:N+4
+for n=5:N+5
 
     % compute crossover network filters outputs
     y_lpf= (a_lp(5)/b_lp(1))*lpf.in(n) + (a_lp(4)/b_lp(1))*lpf.in(n-1) + (a_lp(3)/b_lp(1))*lpf.in(n-2) + (a_lp(2)/b_lp(1))*lpf.in(n-3) + (a_lp(1)/b_lp(1))*lpf.in(n-4) - (b_lp(2)/b_lp(1))*lpf.state(n-1) - (b_lp(3)/b_lp(1))*lpf.state(n-2) - (b_lp(4)/b_lp(1))*lpf.state(n-3) - (b_lp(5)/b_lp(1))*lpf.state(n-4);
@@ -63,29 +63,28 @@ for n=5:N+4
 
     % compute bass SDF output
     sum = 0;
-    sdf_b.in(n) = lpf.state(n);
+    
     for i=0:1:N_sdf_b
-        sum = sum + nchoosek(N_sdf_b,i)*m_b(n-4)^i*(sdf_b.in(n-(N_sdf_b-i))-sdf_b.state(n-i));
+        sum = sum + nchoosek(N_sdf_b,i)*m_b(n)^i*(y_lpf(n-(N_sdf_b-i))-y(n-i));
     end
     y_lp_sdf= sum;
-    sdf_b.state(n) = y_lp_sdf;
+       
 
     % compute treble SDF output
     sum = 0;
     sdf_h.in(n) = hpf.state(n);
-    for i=0:1:N_sdf_t
-        sum = sum + nchoosek(N_sdf_t,i)*m_t(n-4)^i*(sdf_h.in(n-(N_sdf_t-i))-sdf_h.state(n-i));
+    for i=1:1:N_sdf_t
+        sum = sum + nchoosek(N_sdf_t,i)*m_t(n)^i*(y_hpf(n-(N_sdf_t-i))-y(n-i));
     end
     y_hp_sdf= sum;
-    sdf_b.state(n) = y_hp_sdf;
 
     % implement AM modulation blocks
-    y_lp_am= (1 + alpha*m_b(n-4))*y_lp_sdf;
-    y_hp_am= (1 + alpha*m_b(n-4))*y_hp_sdf;
+    y_lp_am= (1 + alpha*m_b(n))*y_lp_sdf(n);
+    y_hp_am= (1 + alpha*m_b(n))*y_hp_sdf(n);
 
     y(n-4)= y_lp_am +y_hp_am;
 
 end
-y = y(1:N);
+
 end
 
