@@ -17,7 +17,6 @@ Fs =FsLTSpice/downSampFact;
 
 %% Downsample Input Signal
 Vin=Vin([1:downSampFact:end]);
-
 %% Sampling Period
 Ts=1/Fs;
 %% Number of Samples
@@ -29,10 +28,10 @@ L1=0.35*10^(-3);
 L2=0.35*10^(-3);
 L3=3.5*10^(-3);
 L4=3.5*10^(-3);
-C1= 2.8*10^(-6);
-C2= 2.8*10^(-6);
-C3= 28*10^(-6);
-C4= 4.7*10^(-6);
+C1=2.8*10^(-6);
+C2=2.8*10^(-6);
+C3=28*10^(-6);
+C4=4.7*10^(-6);
 C5=28*10^(-6);
 C6=47*10^(-6);
 %% Resistive Parameters
@@ -80,7 +79,7 @@ Z31 = Z30;
 Z29 = Ts/(2*C2);
 Z27 = Z29*Z30/(Z29+Z30);
 Z28 = Z27;
-Z26 = 2*L2/(Ts);
+Z26 = 2*L2/Ts;
 Z3 = Z26+Z27;
 Z25 = Z3;
 Z1 = Z2*Z3/(Z2+Z3);
@@ -95,6 +94,7 @@ S19 = 2/(1/Z19+1/Z20+1/Z21)*[1/Z19; 1/Z20; 1/Z21]*ones(1,3)-eye(3);
 S28 = 2/(1/Z28+1/Z29+1/Z30)*[1/Z28; 1/Z29; 1/Z30]*ones(1,3)-eye(3);
 S34 = 2/(1/Z34+1/Z35+1/Z36)*[1/Z34; 1/Z35; 1/Z36]*ones(1,3)-eye(3);
 S37 = 2/(1/Z37+1/Z38+1/Z39)*[1/Z37; 1/Z38; 1/Z39]*ones(1,3)-eye(3);
+
 %series
 S7 = eye(3)-2/(Z7+Z8+Z9)*[Z7;Z8;Z9]*ones(1,3);
 S13 = eye(3)-2/(Z13+Z14+Z15)*[Z13;Z14;Z15]*ones(1,3);
@@ -102,6 +102,7 @@ S22 = eye(3)-2/(Z22+Z23+Z24)*[Z22;Z23;Z24]*ones(1,3);
 S25 = eye(3)-2/(Z25+Z26+Z27)*[Z25;Z26;Z27]*ones(1,3);
 S31 = eye(3)-2/(Z31+Z32+Z33)*[Z31;Z32;Z33]*ones(1,3);
 S40 = eye(3)-2/(Z40+Z41+Z42)*[Z40;Z41;Z42]*ones(1,3);
+
 %% Initialization of Waves
 a = zeros(Nsamp+1,42);
 b = zeros(Nsamp+1,42);
@@ -119,7 +120,7 @@ while (ii<Nsamp)
     ii=ii+1;
 
     %% Manage Dynamic Elements
-    
+
     a(ii+1,12) = -b(ii,12);
     a(ii+1,26) = -b(ii,26);
     a(ii+1,35) = -b(ii,35);
@@ -139,6 +140,7 @@ while (ii<Nsamp)
    
     a(ii+1,11) = 0;
     a(ii+1,20) = 0;
+    a(ii+1,24) = 0;
     a(ii+1,42) = 0;
     a(ii+1,38) = 0;
 
@@ -157,8 +159,8 @@ while (ii<Nsamp)
 
     %third layer
     a(ii+1,5) = b(ii+1,7);
-    a(ii+1,18)=b(ii+1,19);
-    a(ii+1,36)=b(ii+1,37);
+    a(ii+1,18) = b(ii+1,19);
+    a(ii+1,36) = b(ii+1,37);
     b(ii+1,16) = S16(1,1)*a(ii+1,16)+S16(1,2)*a(ii+1,17)+S16(1,3)*a(ii+1,18);
     b(ii+1,34) = S34(1,1)*a(ii+1,34)+S34(1,2)*a(ii+1,35)+S34(1,3)*a(ii+1,36);
 
@@ -250,7 +252,6 @@ while (ii<Nsamp)
     VoutMid(ii) = (a(ii+1,38) + b(ii+1,38))/2;
     VoutHigh(ii) = (a(ii+1,11) + b(ii+1,11))/2;
 end
-
 
 %% Output Plots
 figure
