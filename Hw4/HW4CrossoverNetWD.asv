@@ -68,7 +68,7 @@ Z42 = R1;
 Z41 = Ts/(2*C4);
 Z39 = Z42+Z41;
 Z40 = Z39;
-Z38 = RspkMid;
+Z38 = RspkHigh;
 Z36 = Z39*Z38/(Z39+Z38);
 Z37 = Z36;
 Z35 = 2*L3/Ts;
@@ -119,7 +119,26 @@ while (ii<Nsamp)
     ii=ii+1;
 
     %% Manage Dynamic Elements
+%     if ii==1
+%         a(ii,12)=0;
+%         a(ii,26)=0;
+%         a(ii,35)=0;
+%         a(ii,8)=0;
+%         a(ii,29)=0;
+%         a(ii,32)=0;
+%     else
+%         a(ii,12) = -b(ii-1,12);
+%         a(ii,26) = -b(ii-1,26);
+%         a(ii,35) = -b(ii-1,35);
+%         a(ii,8) = b(ii-1,8);
+%         a(ii,29) = b(ii-1,29);
+%         a(ii,32) = b(ii-1,32);
+% 
+%     end
     
+    
+    %% Forward Scan
+    %leaves
     a(ii+1,12) = -b(ii,12);
     a(ii+1,26) = -b(ii,26);
     a(ii+1,35) = -b(ii,35);
@@ -132,16 +151,10 @@ while (ii<Nsamp)
     a(ii+1,17) = b(ii,17);
     a(ii+1,22) = b(ii,22);
 
-    
-    
-    %% Forward Scan
-    %leaves
-   
     a(ii+1,11) = 0;
     a(ii+1,20) = 0;
     a(ii+1,42) = 0;
     a(ii+1,38) = 0;
-
     %first layer of adaptors
     b(ii+1,22) = S22(1,1)*a(ii+1,22)+S22(1,2)*a(ii+1,23)+S22(1,3)*a(ii+1,24);
     b(ii+1,10) = S10(1,1)*a(ii+1,10)+S10(1,2)*a(ii+1,11)+S22(1,3)*a(ii+1,12);
@@ -207,8 +220,8 @@ while (ii<Nsamp)
     a(ii+1,28) = b(ii+1,27);
     b(ii+1,14) = S13(2,1)*a(ii+1,13)+S13(2,2)*a(ii+1,14)+S13(2,3)*a(ii+1,15);
     b(ii+1,15) = S13(3,1)*a(ii+1,13)+S13(3,2)*a(ii+1,14)+S13(3,3)*a(ii+1,15);
-    b(ii+1,8) = S7(2,1)*a(ii+1,7)+S7(2,2)*a(ii+1,8)+S7(2,3)*a(ii+1,9);
-    b(ii+1,9) = S7(3,1)*a(ii+1,7)+S7(3,2)*a(ii+1,8)+S7(3,3)*a(ii+1,9);
+    b(ii+1,8) = S8(2,1)*a(ii+1,7)+S13(2,2)*a(ii+1,8)+S13(2,3)*a(ii+1,9);
+    b(ii+1,9) = S8(3,1)*a(ii+1,7)+S13(3,2)*a(ii+1,8)+S13(3,3)*a(ii+1,9);
     b(ii+1,29) = S28(2,1)*a(ii+1,28)+S28(2,2)*a(ii+1,29)+S28(2,3)*a(ii+1,30);
     b(ii+1,30) = S28(3,1)*a(ii+1,28)+S28(3,2)*a(ii+1,29)+S28(3,3)*a(ii+1,30);
     
@@ -248,7 +261,6 @@ while (ii<Nsamp)
     %% Read Output
     VoutLow(ii) = (a(ii+1,20) + b(ii+1,20))/2;
     VoutMid(ii) = (a(ii+1,38) + b(ii+1,38))/2;
-    VoutHigh(ii) = (a(ii+1,11) + b(ii+1,11))/2;
 end
 
 
