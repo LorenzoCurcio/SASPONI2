@@ -133,7 +133,7 @@ while (ii<Nsamp)
     a(ii+1,32) = b(ii,32);
     a(ii+1,41) = b(ii,41);
     a(ii+1,17) = b(ii,17);
-    a(ii+1,22) = b(ii,22);
+    a(ii+1,23) = b(ii,23);
 
     
     
@@ -251,9 +251,9 @@ while (ii<Nsamp)
    
 
     %% Read Output
-    VoutLow(ii) = (a(ii+1,20) + b(ii+1,20))/2;
+    VoutLow(ii) = -(a(ii+1,20) + b(ii+1,20))/2;
     VoutMid(ii) = (a(ii+1,38) + b(ii+1,38))/2;
-    VoutHigh(ii) = (a(ii+1,11) + b(ii+1,11))/2;
+    VoutHigh(ii) = -(a(ii+1,11) + b(ii+1,11))/2;
 end
 
 
